@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Historial de Inspecciones AENOR</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; }
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; border: 1px solid #eee; text-align: left; }
+        th { background: #4a90e2; color: white; }
+        tr:hover { background: #f9f9f9; }
+        .btn-excel { background: #27ae60; color: white; padding: 5px 10px; text-decoration: none; border-radius: 4px; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>📋 Historial de Reportes Guardados</h2>
+        <table id="tablaHistorial">
+            <thead>
+                <tr>
+                    <th>Fecha Registro</th>
+                    <th>Nombre Site</th>
+                    <th>Proyecto</th>
+                    <th>Inspector</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+    </div>
+
+    <script>
+        async function cargarHistorial() {
+            const res = await fetch('https://backend-reportes-excel.onrender.com/historial-datos');
+            const datos = await res.json();
+            const tbody = document.querySelector('#tablaHistorial tbody');
+            
+            datos.forEach(reg => {
+                const fecha = new Date(reg.fecha_registro).toLocaleString();
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${fecha}</td>
+                        <td>${reg.nombre_site}</td>
+                        <td>${reg.proyecto}</td>
+                        <td>${reg.inspector_nombre}</td>
+                        <td><button onclick='regenerar("${reg.id}")' class="btn-excel">Descargar copia</button></td>
+                    </tr>`;
+            });
+        }
+
+        function regenerar(id) {
+            alert("Función para reconstruir el Excel del ID: " + id + " en desarrollo.");
+        }
+
+        window.onload = cargarHistorial;
+    </script>
+</body>
+</html>
